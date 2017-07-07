@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
+	<title>Carousel demo</title>
+	<style>
+		*{margin: 0; padding: 0;}
+		.wrapper, .scroller{position: relative; width: 7.5rem; height: 4rem; max-width: 750px; margin: 0 auto; overflow: hidden;}
+		.scroller li{position: absolute; list-style: none; width: 3rem; height: 4rem; color: #fff; font-size: 1rem; text-align: center; background: #f00;}
+		.scroller li:nth-child(1){background: red}
+		.scroller li:nth-child(2){background: green}
+		.scroller li:nth-child(3){background: blue}
+		.scroller li:nth-child(4){background: black}
+		.scroller li:nth-child(5){background: purple}
+		.scroller li{-webkit-filter: blur(3px); }
+		.scroller .active{ -webkit-filter: none; }
+		.btns{padding: 10px; text-align: center;}
+		.btns b{font-size: 20px; margin: 0 20px;}
+	</style>
+	<script>
+	(function(doc, win) {
+	    var docEl = doc.documentElement,
+	        isIOS = navigator.userAgent.match(/iphone|ipod|ipad/gi),
+	        dpr = isIOS ? Math.min(win.devicePixelRatio, 3) : 1,
+	        resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize';
+	    docEl.dataset.dpr = dpr;
+	    var recalc = function() {
+	        var width = docEl.clientWidth;
+	        if (width / dpr > 750) width = 750 * dpr;
+	        docEl.style.fontSize = 100 * (width / 750) + 'px';
+	    };
+	    recalc();
+	    if (!doc.addEventListener) return;
+	    win.addEventListener(resizeEvt, recalc, false);
+	})(document, window);
+	</script>
+</head>
+<body>
+	<div class="wrapper" id="wrapper">
+		<ul class="scroller">
+			<li>1</li>
+			<li>2</li>
+			<li>3</li>
+			<li>4</li>
+			<li>5</li>
+		</ul>
+	</div>
+	<div class="btns"><b class="prev">PREV</b> <b class="next">NEXT</b></div>
+
+	<br>
+
+	<div class="wrapper" id="wrapper2">
+		<ul class="scroller">
+			<li>1</li>
+			<li>2</li>
+			<li>3</li>
+			<li>4</li>
+			<li>5</li>
+		</ul>
+	</div>
+	<script src="mCarousel.min.js"></script>
+	<script>
+		
+		// 1
+		var carousel = new mCarousel('#wrapper', {
+			// index: 2,
+			// active: 'active',
+			scale: 0.6,
+			duration: 500,
+			// locked: true,
+			before: function() {
+				console.log('切换开始')
+			},
+			after: function() {
+				console.log('切换结束')
+			}
+		});
+		document.querySelector('.next').onclick = function(){
+			carousel.next();
+		};
+		document.querySelector('.prev').onclick = function(){
+			carousel.prev();
+		};
+
+		// 2
+		new mCarousel('#wrapper2', {
+			// index: 2,
+			// active: 'active',
+			// scale: 0.6,
+			// duration: 500,
+			locked: true,
+			before: function() {
+				console.log('切换开始')
+			},
+			after: function() {
+				console.log('切换结束')
+			}
+		});
+	</script>
+</body>
+</html>
