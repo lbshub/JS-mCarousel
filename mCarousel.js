@@ -168,19 +168,33 @@
 			utils.on(this.wrapper, 'touchend', this._end.bind(this));
 		},
 		_start: function(e) {
+			if (!e.touches) return;
+			this.startX = e.touches[0].pageX;
+			this.startY = e.touches[0].pageY;
+			this.fixed = '';
 			this.startTime = utils.getTime();
 			this._reset();
 		},
 		_move: function(e) {
 			if (!e.touches) return;
 			if (!!this.animated) return;
-			e.preventDefault();
+			if (this.fixed === 'top') return;
 
 			var moveX = e.touches[0].pageX,
 				moveY = e.touches[0].pageY,
 				deltaX = this.moveX === null ? 0 : moveX - this.moveX,
 				deltaY = this.moveY === null ? 0 : moveY - this.moveY,
 				timestamp = utils.getTime();
+
+			if (this.fixed === '') {
+				if (Math.abs(moveY - this.startY) > Math.abs(moveX - this.startX)) {
+					this.fixed = 'top';
+				} else {
+					this.fixed = 'left';
+				}
+			}
+
+			if (this.fixed === 'left') e.preventDefault();
 
 			this.deltaX += deltaX;
 			this.deltaY += deltaY;
